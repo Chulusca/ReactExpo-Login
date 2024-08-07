@@ -4,40 +4,45 @@ import { useNavigation } from '@react-navigation/native';
 import SvgTop from '../components/Svg';
 import ButtonGradient from "../components/ButtonGradient";  
 
-export default function RegisterScreen({ navigation }) {  // Asegúrate de recibir `navigation` como prop
+export default function RegisterScreen() {  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
+
   const navigation = useNavigation();
+
+  const handleHasAccount = () => {
+    navigation.navigate('Login');
+  } 
 
   const handleRegister = () => {
     if(email && password && nombre && apellido){
-        Alert.alert(
-            'Success',
-            `${email} registrado correctamente`,
-            [
-              { text: 'OK', onPress: () => console.log(email) }
-            ],
-            { cancelable: false }
-          );
-          navigation.navigate('Home');  // Cambia el destino a 'Home' o el que desees
+      Alert.alert(
+          'Success',
+          `${email} registrado correctamente`,
+          [
+            { text: 'OK', onPress: () => console.log(email) }
+          ],
+          { cancelable: false }
+        );
+        navigation.navigate('Home', { nombre, apellido, email });
     }else{
-        Alert.alert(
-            `Error`,
-            `Llena tus datos, por favor.`,
-            [
-              { text: 'OK', onPress: () => console.log("Se intentó registrar sin completar los datos") }
-            ],
-            { cancelable: false }
-          );
+      Alert.alert(
+          `Error`,
+          `Llena tus datos, por favor.`,
+          [
+            { text: 'OK', onPress: () => console.log("Se intentó registrar sin completar los datos") }
+          ],
+          { cancelable: false }
+        );
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}  // Ajusta el comportamiento según la plataforma
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
     >
       <View style={styles.innerContainer}>
         <SvgTop />
@@ -74,7 +79,7 @@ export default function RegisterScreen({ navigation }) {  // Asegúrate de recib
           secureTextEntry={true}
         />
         
-        <Text style={styles.subTitlePequeño}>¿Ya tienes una cuenta?</Text>
+        <Text style={styles.subTitlePequeño} onPress={handleHasAccount}>¿Ya tienes una cuenta?</Text>
         <ButtonGradient funcion={handleRegister} text={'Entrar'} />
       </View>
     </KeyboardAvoidingView>
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 0.3,
     borderColor: 'lightgrey',
-    backgroundColor: '#fff',
+    backgroundColor: '#f6f5f5',
     borderRadius: 25,
     padding: 8,
     margin: 10,
