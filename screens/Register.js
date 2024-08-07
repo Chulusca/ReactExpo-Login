@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, Alert, KeyboardAvoidingView, Platform } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import SvgTop from '../components/Svg';
 import ButtonGradient from "../components/ButtonGradient";  
 
@@ -8,6 +9,7 @@ export default function RegisterScreen({ navigation }) {  // Asegúrate de recib
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
+  const navigation = useNavigation();
 
   const handleRegister = () => {
     if(email && password && nombre && apellido){

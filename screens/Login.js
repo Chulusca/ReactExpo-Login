@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Dimensions, Alert } from "react-native";
+import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import SvgTop from '../components/Svg';
 import ButtonGradient from "../components/ButtonGradient";      
