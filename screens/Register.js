@@ -1,61 +1,90 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Dimensions } from "react-native";
+import { StyleSheet, Text, View, TextInput, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import SvgTop from '../components/Svg';
 import ButtonGradient from "../components/ButtonGradient";  
 
-export default function RegisterScreen() {
+export default function RegisterScreen({ navigation }) {  // Asegúrate de recibir `navigation` como prop
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
 
-  return (
-    <View style={styles.container}>
-      <SvgTop />
-      <Text style={styles.title}>Hola</Text>
-      <Text style={styles.subTitle}>Registrate!</Text>
+  const handleRegister = () => {
+    if(email && password && nombre && apellido){
+        Alert.alert(
+            'Success',
+            `${email} registrado correctamente`,
+            [
+              { text: 'OK', onPress: () => console.log(email) }
+            ],
+            { cancelable: false }
+          );
+          navigation.navigate('Home');  // Cambia el destino a 'Home' o el que desees
+    }else{
+        Alert.alert(
+            `Error`,
+            `Llena tus datos, por favor.`,
+            [
+              { text: 'OK', onPress: () => console.log("Se intentó registrar sin completar los datos") }
+            ],
+            { cancelable: false }
+          );
+    }
+  };
 
-      <TextInput
-        style={styles.input}
-        placeholder="thiago@email.com"
-        placeholderTextColor={'lightgrey'}
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="nombre"
-        placeholderTextColor={'lightgrey'}
-        value={password}
-        onChangeText={setNombre}
-        secureTextEntry={true}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="apellido"
-        placeholderTextColor={'lightgrey'}
-        value={password}
-        onChangeText={setApellido}
-        secureTextEntry={true}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="contraseña"
-        placeholderTextColor={'lightgrey'}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      />
-      
-      <Text style={styles.subTitlePequeño}>Olvidaste tu contraseña?</Text>
-      <ButtonGradient title='Succesful' email={email} password={password} text={'Entrar'} />
-    </View>
+  return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}  // Ajusta el comportamiento según la plataforma
+    >
+      <View style={styles.innerContainer}>
+        <SvgTop />
+        <Text style={styles.title}>Hola</Text>
+        <Text style={styles.subTitle}>¡Regístrate!</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="thiago@email.com"
+          placeholderTextColor={'lightgrey'}
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="nombre"
+          placeholderTextColor={'lightgrey'} 
+          value={nombre}
+          onChangeText={setNombre}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="apellido"
+          placeholderTextColor={'lightgrey'}
+          value={apellido}
+          onChangeText={setApellido}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="contraseña"
+          placeholderTextColor={'lightgrey'}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={true}
+        />
+        
+        <Text style={styles.subTitlePequeño}>¿Ya tienes una cuenta?</Text>
+        <ButtonGradient funcion={handleRegister} text={'Entrar'} />
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#f1f1f1',
+  },
+  innerContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
