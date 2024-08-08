@@ -1,37 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, View, TextInput, Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import SvgTop from '../components/Svg';
 import ButtonGradient from "../components/ButtonGradient";     
+import { AuthContext } from '../context/AuthContext';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation(); 
+  const { signIn } = useContext(AuthContext);
 
   const handleNoAccount = () => {
     navigation.navigate('Register');
   }
 
-  const handleLogin = () => {
-    if(email && password){
+  const handleLogin = async () => { 
+    if (email && password) {
+      try {
+        await signIn(email, password);
         Alert.alert(
-            'Success',
-            `${email} logeado correctamente`,
-            [
-              { text: 'OK', onPress: () => console.log(email) }
-            ],
-            { cancelable: false }
-          );
-    }else{
+          'Success',
+          `${email} logeado correctamente`, 
+          [{ text: 'OK', onPress: () => console.log(email) }],
+          { cancelable: false }
+        );
+      } catch (error) {
+        console.log(error);
         Alert.alert(
-            `Error`,
-            `Llena tus datos.`,
-            [
-              { text: 'OK', onPress: () => console.log("Se intento logear un bobi") }
-            ],
-            { cancelable: false }
-          );
+          'Error',
+          `Error al iniciar sesión.`,
+          [{ text: 'OK', onPress: () => console.log('Error de inicio de sesión') }],
+          { cancelable: false }
+        );
+      }
+    } else {
+      Alert.alert(
+        'Error',
+        'Llena tus datos.',
+        [{ text: 'OK', onPress: () => console.log('Se intentó loguear con datos incompletos') }],
+        { cancelable: false }
+      );
     }
   };
 

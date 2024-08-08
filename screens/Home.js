@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import ButtonGradient from "../components/ButtonGradient";  
+import { AuthContext } from '../context/AuthContext';
 
-export default function HomeScreen({ route }) {
-  const { nombre, apellido, email } = route.params || {};
+export default function HomeScreen() {
+  const { user, signOut } = useContext(AuthContext);
 
-  if (!nombre || !apellido || !email) {
+  if (user.username == '') {
     return (
       <View style={styles.container}>
         <Text>Error: No se recibieron los parámetros correctamente.</Text>
+        <ButtonGradient text={'Sing Out'} funcion={signOut} />
       </View>
     );
   }
@@ -15,9 +18,10 @@ export default function HomeScreen({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.name}>{`${nombre} ${apellido}`}</Text>
-        <Text style={styles.email}>{email}</Text>
+        <Text style={styles.name}>{`${user.first_name} ${user.last_name}`}</Text>
+        <Text style={styles.email}>{user.username}</Text>
       </View>
+      <ButtonGradient text={'Sing Out'} funcion={signOut} />
     </View>
   );
 }
