@@ -1,9 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginUser, validateToken, registerUser} from '../services/Users'
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [token, setToken] = useState(null);
   const [user, setUser] = useState({
     first_name: '',
     last_name: '',
@@ -27,11 +29,15 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signIn = async (username_, password_) => {
+    let response = await loginUser(username_, password_);
+    console.log(response.token);
+    response = await validateToken(response.token);
+
     const authenticatedUser = {
-        first_name: 'example',
-        last_name: 'example',
-        username: username_,
-        password: password_
+      first_name: response.first_name,
+      last_name: response.last_name,
+      username: response.username,
+      password: response.password
     }
     setUser(authenticatedUser);
     await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
