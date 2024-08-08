@@ -37,6 +37,17 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
   };
 
+  const register = async (username_, password_, first_name_, last_name_) => {
+    const authenticatedUser = {
+        first_name: first_name_,
+        last_name: last_name_,
+        username: username_,
+        password: password_
+    }
+    setUser(authenticatedUser);
+    await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
+  };
+
   const signOut = async () => {
     setUser({
         first_name: '',
@@ -51,7 +62,8 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider value={{
       user,
       signIn,
-      signOut
+      signOut,
+      register
     }}>
       {children}
     </AuthContext.Provider>

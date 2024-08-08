@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext} from "react";
 import { StyleSheet, Text, View, TextInput, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import SvgTop from '../components/Svg';
 import ButtonGradient from "../components/ButtonGradient";  
+import { AuthContext } from '../context/AuthContext';
 
 export default function RegisterScreen() {  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
+  const { register } = useContext(AuthContext);
 
   const navigation = useNavigation();
 
@@ -16,26 +18,32 @@ export default function RegisterScreen() {
     navigation.navigate('Login');
   } 
 
-  const handleRegister = () => {
-    if(email && password && nombre && apellido){
-      Alert.alert(
+  const handleRegister = async () => { 
+    if (email && password) {
+      try {
+        await register(email, password, nombre, apellido);
+        Alert.alert(
           'Success',
-          `${email} registrado correctamente`,
-          [
-            { text: 'OK', onPress: () => console.log(email) }
-          ],
+          `${email} logeado correctamente`, 
+          [{ text: 'OK', onPress: () => console.log(email) }],
           { cancelable: false }
         );
-        navigation.navigate('Home', { nombre, apellido, email });
-    }else{
+      } catch (error) {
+        console.log(error);
+        Alert.alert(
+          'Error',
+          `Error al iniciar sesión.`,
+          [{ text: 'OK', onPress: () => console.log('Error de inicio de sesión') }],
+          { cancelable: false }
+        );
+      }
+    } else {
       Alert.alert(
-          `Error`,
-          `Llena tus datos, por favor.`,
-          [
-            { text: 'OK', onPress: () => console.log("Se intentó registrar sin completar los datos") }
-          ],
-          { cancelable: false }
-        );
+        'Error',
+        'Llena tus datos.',
+        [{ text: 'OK', onPress: () => console.log('Se intentó loguear con datos incompletos') }],
+        { cancelable: false }
+      );
     }
   };
 
