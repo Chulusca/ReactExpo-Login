@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const API_URL = 'http://10.144.1.48:3000'; // Reemplaza con tu URL y puerto
+const API_URL = 'https://4de5-200-73-176-50.ngrok-free.app';
 
 export const loginUser = async (username, password) => {
     try {
       const response = await axios.post(`${API_URL}/api/user/login`, {
-        username,
-        password,
+        username: username,
+        password: password
       });
   
       if (!response.data.success) {
