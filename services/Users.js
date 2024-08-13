@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://4de5-200-73-176-50.ngrok-free.app';
+const API_URL = 'https://638d-186-19-157-106.ngrok-free.app';
 
 export const loginUser = async (username, password) => {
     try {
@@ -22,32 +22,42 @@ export const loginUser = async (username, password) => {
       };
     } catch (error) {
       console.error('Error en loginUser:', error.message || error);
-      throw error;
     }
   };
 
 export const registerUser = async (userData) => {
-  
+    const response = await axios.post(`${API_URL}/api/user/register`, {
+      first_name: userData.first_name,
+      last_name: userData.last_name,
+      username: userData.username,
+      password: userData.password
+    });
+    
+    console.log(response);
+    
+    if(response.status == 201){
+      const login = loginUser(userData.username, userData.password)
+      const payload = validateToken(login.token)
+      return {
+        payload: payload,
+        token: login.token
+      }
+    }
+    else{
+      return false;
+    }
 };
 
 export const validateToken = async (token) => {
-    try {
+    try 
+    {
         const response = await axios.get(`${API_URL}/api/user/validartoken`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-     
-        if (!response.data.success) {
-        console.log('error');
-          return {
-            message: response.data.message,
-          };
-        }   
-        console.log(response.data);
         return response.data.user;
     } catch (error) {
-        console.error('Error en loginUser:', error.message || error);
-        throw error;
+      console.error('Error en loginUser:', error.message || error);
     }
 };

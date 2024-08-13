@@ -19,34 +19,34 @@ export default function RegisterScreen() {
   } 
 
   const handleRegister = async () => { 
-    if (email && password) {
-      try {
-        await register(email, password, nombre, apellido);
+    if (email && password && nombre && apellido) {
+      let response = await register(email, password, nombre, apellido);
+      if(response){
         Alert.alert(
           'Success',
           `${email} logeado correctamente`, 
-          [{ text: 'OK', onPress: () => console.log(email) }],
-          { cancelable: false }
-        );
-      } catch (error) {
-        console.log(error);
-        Alert.alert(
-          'Error',
-          `Error al iniciar sesión.`,
-          [{ text: 'OK', onPress: () => console.log('Error de inicio de sesión') }],
+          [{ text: 'OK'}],
           { cancelable: false }
         );
       }
-    } else {
+      else{
+        Alert.alert(
+          'Error',
+          `Error al iniciar sesión.`,
+          [{ text: 'OK'}],
+          { cancelable: false }
+          )
+      }
+      }
+    else {
       Alert.alert(
         'Error',
         'Llena tus datos.',
-        [{ text: 'OK', onPress: () => console.log('Se intentó loguear con datos incompletos') }],
+        [{ text: 'OK'}],
         { cancelable: false }
       );
     }
-  };
-
+  }
   return (
     <KeyboardAvoidingView
       style={styles.container}

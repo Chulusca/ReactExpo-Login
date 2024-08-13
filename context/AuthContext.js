@@ -30,28 +30,39 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (username_, password_) => {
     let response = await loginUser(username_, password_);
-    console.log(response.token);
-    response = await validateToken(response.token);
+    let userResponse = await validateToken(response.token);
 
     const authenticatedUser = {
-      first_name: response.first_name,
-      last_name: response.last_name,
-      username: response.username,
-      password: response.password
+      first_name: userResponse.first_name,
+      last_name: userResponse.last_name,
+      username: userResponse.username,
+      password: userResponse.password
     }
+
+    setToken(response.token);
     setUser(authenticatedUser);
     await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
   };
 
   const register = async (username_, password_, first_name_, last_name_) => {
     const authenticatedUser = {
-        first_name: first_name_,
-        last_name: last_name_,
-        username: username_,
-        password: password_
+      first_name: first_name_,
+      last_name: last_name_,
+      username: username_,
+      password: password_
     }
-    setUser(authenticatedUser);
-    await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
+
+    let response = registerUser(authenticatedUser);
+
+    if(response === false){
+      return false;
+    }
+    else{
+      setUser(authenticatedUser);
+      setToken(response.token)
+      await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
+      return true;
+    }
   };
 
   const signOut = async () => {
