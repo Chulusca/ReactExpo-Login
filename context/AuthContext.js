@@ -30,18 +30,24 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = async (username_, password_) => {
     let response = await loginUser(username_, password_);
-    let userResponse = await validateToken(response.token);
+    
+    if(response.success){
+      let userResponse = await validateToken(response.token);
 
-    const authenticatedUser = {
-      first_name: userResponse.first_name,
-      last_name: userResponse.last_name,
-      username: userResponse.username,
-      password: userResponse.password
+      const authenticatedUser = {
+        first_name: userResponse.first_name,
+        last_name: userResponse.last_name,
+        username: userResponse.username,
+        password: userResponse.password
+      }
+
+      setToken(response.token);
+      setUser(authenticatedUser);
+      await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
     }
-
-    setToken(response.token);
-    setUser(authenticatedUser);
-    await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
+    else{
+      return response;
+    }
   };
 
   const register = async (username_, password_, first_name_, last_name_) => {
@@ -52,16 +58,18 @@ export const AuthProvider = ({ children }) => {
       password: password_
     }
 
-    let response = registerUser(authenticatedUser);
+    let response = await registerUser(authenticatedUser);
 
-    if(response === false){
-      return false;
+    if(response.success === false){
+      return response;
     }
     else{
       setUser(authenticatedUser);
       setToken(response.token)
       await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
-      return true;
+      return {
+        success: true
+      }
     }
   };
 

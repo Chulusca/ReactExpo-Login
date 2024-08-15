@@ -21,7 +21,7 @@ export default function RegisterScreen() {
   const handleRegister = async () => { 
     if (email && password && nombre && apellido) {
       let response = await register(email, password, nombre, apellido);
-      if(response){
+      if(response.success){
         Alert.alert(
           'Success',
           `${email} logeado correctamente`, 
@@ -32,7 +32,7 @@ export default function RegisterScreen() {
       else{
         Alert.alert(
           'Error',
-          `Error al iniciar sesión.`,
+          `${response.message}`,
           [{ text: 'OK'}],
           { cancelable: false }
           )

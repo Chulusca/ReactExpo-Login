@@ -17,28 +17,30 @@ export default function LoginScreen() {
 
   const handleLogin = async () => { 
     if (email && password) {
-      try {
-        await signIn(email, password);
+      const response = await signIn(email, password);
+      if(response.success){
         Alert.alert(
           'Success',
           `${email} logeado correctamente`, 
-          [{ text: 'OK', onPress: () => console.log(email) }],
-          { cancelable: false }
-        );
-      } catch (error) {
-        console.log(error);
-        Alert.alert(
-          'Error',
-          `Error al iniciar sesión.`,
-          [{ text: 'OK', onPress: () => console.log('Error de inicio de sesión') }],
+          [{ text: 'OK'}],
           { cancelable: false }
         );
       }
-    } else {
+      else{
+        Alert.alert(
+          'Error',
+          `${response.message}`,
+          [{ text: 'OK'}],
+          { cancelable: false }
+        );
+      }
+    }
+    else 
+    {
       Alert.alert(
         'Error',
         'Llena tus datos.',
-        [{ text: 'OK', onPress: () => console.log('Se intentó loguear con datos incompletos') }],
+        [{ text: 'OK'}],
         { cancelable: false }
       );
     }
