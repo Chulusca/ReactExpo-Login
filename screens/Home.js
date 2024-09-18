@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ButtonGradient from "../components/ButtonGradient";  
 import { AuthContext } from '../context/AuthContext';
+import { getEvents } from '../services/Events';
 
 export default function HomeScreen() {
   const { user, signOut } = useContext(AuthContext);
@@ -21,6 +22,7 @@ export default function HomeScreen() {
         <Text style={styles.name}>{`${user.first_name} ${user.last_name}`}</Text>
         <Text style={styles.email}>{user.username}</Text>
       </View>
+      <ButtonGradient text={'Cargar Eventos'} funcion={getEvents} />
       <ButtonGradient text={'Sing Out'} funcion={signOut} />
     </View>
   );

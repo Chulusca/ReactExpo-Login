@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://5d4f-181-84-200-119.ngrok-free.app';
+const API_URL = 'https://pheasant-primary-sincerely.ngrok-free.app';
 
 export const loginUser = async (username, password) => {
     try {
