@@ -7,14 +7,14 @@ import { getEvents } from '../services/Events';
 
 export default function HomeScreen() {
   const { user, signOut } = useContext(AuthContext);
-  const [events, setEvents] = useState('');
+  const [events, setEvents] = useState([]);
+
+  const fetchEvents = async () => {
+    const fetchedEvents = await getEvents();
+    setEvents(fetchedEvents || []);
+  };
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const fetchedEvents = await getEvents();
-      setEvents(fetchedEvents);
-    };
-
     fetchEvents();
   }, []);
 
@@ -33,7 +33,7 @@ export default function HomeScreen() {
         <Text style={styles.name}>{`${user.first_name} ${user.last_name}`}</Text>
         <Text style={styles.email}>{user.username}</Text>
       </View>
-      <ButtonGradient text={'Cargar Eventos'} funcion={getEvents} />
+      <ButtonGradient text={'Cargar Eventos'} funcion={fetchEvents} />
       <View style={styles.scrollContainer}>
         <ScrollView
           style={styles.scrollView}
@@ -43,9 +43,14 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewContent}
         >
-          {events.map((event) => (
-            <Text key={event.id} style={styles.text}>{event.name}</Text>
-          ))}
+          {events && events.length > 0 ? ( 
+            events.map((event) => (
+              <Text key={event.id} style={styles.text}>{event.name}</Text>
+            ))
+          ) : (
+            <Text style={styles.text}>No hay eventos disponibles.</Text>
+          )}
+
         </ScrollView>
       </View>
       <ButtonGradient text={'Sing Out'} funcion={signOut} />
