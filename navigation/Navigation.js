@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthContext } from '../context/AuthContext';
+import BottomTabNavigator from './BottomTabNavigator';
 import LoginScreen from '../screens/Login';
 import RegisterScreen from '../screens/Register';
-import HomeScreen from '../screens/Home';
 
 const Stack = createStackNavigator();
 
@@ -23,10 +23,8 @@ export default function Navigation() {
           },
         }}
       >
-        {user.username != '' ? (
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-          </>
+        {user.username ? (
+          <Stack.Screen name="HomeTabs" component={BottomTabNavigator} />
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
