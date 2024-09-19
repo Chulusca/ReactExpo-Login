@@ -23,7 +23,7 @@ export const getEvents = async (page = 1) => {
     try {
         const response = await axios.get(`${API_URL}/api/event`, { params: { page: page } });
         
-        console.log('Datos completos recibidos:', JSON.stringify(response.data[0].events, getCircularReplacer(), 2));
+        //console.log('Datos completos recibidos:', JSON.stringify(response.data[0].events, getCircularReplacer(), 2));
 
         return response.data[0].events; 
 

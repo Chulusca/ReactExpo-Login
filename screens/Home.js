@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import ButtonGradient from "../components/ButtonGradient";  
 import { AuthContext } from '../context/AuthContext';
 import { getEvents } from '../services/Events';
-
+import EventCard from '../components/EventCard';
 
 export default function HomeScreen() {
   const { user, signOut } = useContext(AuthContext);
@@ -45,7 +45,7 @@ export default function HomeScreen() {
         >
           {events && events.length > 0 ? ( 
             events.map((event) => (
-              <Text key={event.id} style={styles.text}>{event.name}</Text>
+              <EventCard key={event.id} event={event} />
             ))
           ) : (
             <Text style={styles.text}>No hay eventos disponibles.</Text>
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     color: '#777',
   },
   scrollViewContent: {
+    padding: 10,
     flexDirection: 'row', 
     alignItems: 'center', 
   },
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   scrollContainer: {
-    height: 100, 
+    height: '10rem', 
     width: '100%',
   },
 });
