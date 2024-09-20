@@ -1,5 +1,8 @@
 import axios from 'axios';
+import { useContext } from 'react'; 
+import { AuthContext } from '../context/AuthContext';
 
+const { token } = useContext(AuthContext);
 const API_URL = 'https://pheasant-primary-sincerely.ngrok-free.app';
 
 function getCircularReplacer() {
@@ -32,3 +35,5 @@ export const getEvents = async (page = 1) => {
         return error.response ? error.response.data : null; 
     }
 };
+
+
