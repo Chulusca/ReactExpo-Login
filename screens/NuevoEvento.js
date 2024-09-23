@@ -20,7 +20,6 @@ export default function NuevoEvento() {
   });
 
   const [categories, setCategories] = useState([]);
-
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
@@ -68,7 +67,7 @@ export default function NuevoEvento() {
         />
         <Picker
           selectedValue={form.id_event_category}
-          style={styles.input}
+          style={styles.picker}
           onValueChange={(value) => handleChange('id_event_category', value)}
         >
           {categories.map((category) => (
@@ -77,7 +76,7 @@ export default function NuevoEvento() {
         </Picker>
         <Picker
           selectedValue={form.id_event_location}
-          style={styles.input}
+          style={styles.picker}
           onValueChange={(value) => handleChange('id_event_location', value)}
         >
           {locations.map((location) => (
@@ -144,5 +143,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
+  },
+  picker: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 5,
   },
 });
