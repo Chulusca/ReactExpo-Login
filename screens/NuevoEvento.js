@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal, Switch } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { AuthContext } from '../context/AuthContext';
-import { getCategorias, getLocations } from '../services/Events';
+import { getCategorias, getLocations, createEvent } from '../services/Events';
 
 export default function NuevoEvento() {
   const { token } = useContext(AuthContext);
@@ -15,12 +15,13 @@ export default function NuevoEvento() {
     start_date: '',
     duration_in_minutes: '',
     price: '',
-    enabled_for_enrollment: '',
+    enabled_for_enrollment: false,
     max_assistance: ''
   });
 
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -43,7 +44,34 @@ export default function NuevoEvento() {
   };
 
   const handleSubmit = () => {
-    Alert.alert('Formulario enviado', JSON.stringify(form));
+    if(form.name && form.description && form.id_event_category && form.id_event_location && form.start_date && form.duration_in_minutes && form.price && form.enabled_for_enrollment && form.max_assistance){
+      setModalVisible(true);
+    }
+    else{
+      Alert.alert('Completar el formulario', 'Faltan datos obligatorios.');
+    }
+    
+  };
+
+  const confirmEvent = async () => {
+    console.log(JSON.stringify(form));  
+    const response = await createEvent(form, token);
+    Alert.alert('Evento agregado', 'El evento ha sido agregado correctamente.');
+    setModalVisible(false); 
+  };
+
+  const cancelEvent = () => {
+    setModalVisible(false);
+  };
+
+  const getCategoryName = (id) => {
+    const category = categories.find(cat => cat.id == id);
+    return category ? category.name : 'No disponible';
+  };
+
+  const getLocationName = (id) => {
+    const location = locations.find(loc => loc.id == id);
+    return location ? location.name : 'No disponible';
   };
 
   return (
@@ -105,21 +133,51 @@ export default function NuevoEvento() {
         />
         <TextInput
           style={styles.input}
-          placeholder="Habilitado para inscripción (1 o 0)"
-          value={form.enabled_for_enrollment}
-          onChangeText={(value) => handleChange('enabled_for_enrollment', value)}
-          keyboardType="numeric"
-        />
-        <TextInput
-          style={styles.input}
           placeholder="Máxima asistencia"
           value={form.max_assistance}
           onChangeText={(value) => handleChange('max_assistance', value)}
           keyboardType="numeric"
         />
+        <View style={styles.switchContainer}>
+          <Text style={styles.header}>Habilitado para inscripción</Text>
+          <Switch
+            value={form.enabled_for_enrollment}
+            onValueChange={(value) => handleChange('enabled_for_enrollment', value)}
+          />
+        </View>
+        
         <Button title="Agregar Evento" onPress={handleSubmit} />
+
+        {/* Modal para validar la información */}
+        <Modal
+          transparent={true}
+          visible={modalVisible}
+          animationType="slide"
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Confirma tu evento</Text>
+              <Text>Nombre: {form.name}</Text>
+              <Text>Descripción: {form.description}</Text>
+              <Text>Categoría: {getCategoryName(form.id_event_category)}</Text>
+              <Text>Ubicación: {getLocationName(form.id_event_location)}</Text>
+              <Text>Fecha de inicio: {form.start_date}</Text>
+              <Text>Duración: {form.duration_in_minutes} minutos</Text>
+              <Text>Precio: ${form.price}</Text>
+              <Text>Inscripción habilitada: {form.enabled_for_enrollment ? 'Sí' : 'No'}</Text>
+              <Text>Máxima asistencia: {form.max_assistance}</Text>
+              <View style={styles.modalButtons}>
+                <Button title="Cancelar" onPress={cancelEvent} />
+                <Button title="Confirmar" onPress={confirmEvent} />
+              </View>
+            </View>
+          </View>
+        </Modal>
+
       </ScrollView>
     </KeyboardAvoidingView>
+
+    
   );
 }
 
@@ -137,6 +195,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  header: {
+    fontSize: 16,
+    fontWeight: "bold"
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -149,5 +211,34 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 5,
     marginBottom: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    justifyContent: 'space-between',
   },
 });

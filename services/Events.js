@@ -59,4 +59,39 @@ export const getLocations = async (token) => {
     }
 }
 
+export const createEvent = async (eventDetails, token) => {
+    try{
+        const response = await axios.post(`${API_URL}/api/event`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json' 
+            },
+            params: {
+                name: eventDetails.name,
+                description: eventDetails.description,
+                id_event_category: eventDetails.id_event_category,
+                id_event_location: eventDetails.id_event_location,
+                start_date: eventDetails.start_date,
+                duration_in_minutes: eventDetails.duration_in_minutes,
+                price: eventDetails.price,
+                enabled_for_enrollment: eventDetails.enabled_for_enrollment ? 1 : 0,
+                max_assistance: eventDetails.max_assistance
+            }
+        });
+        return {
+            status: response.data.status,
+            message: response.data.message,
+        };
+    }
+    catch (error){
+        console.error('Error en createEvent:', error.message || error);
+        return error.response 
+            ? {
+                status: error.response.status,
+                message: error.response.data.message || 'Ocurrió un error.'
+              }
+            : { status: 500, message: 'Error de conexión.' };
+    }
+}
+
 
