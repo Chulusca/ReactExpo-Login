@@ -1,8 +1,5 @@
 import axios from 'axios';
-import { useContext } from 'react'; 
-import { AuthContext } from '../context/AuthContext';
 
-//const { token } = useContext(AuthContext);
 const API_URL = 'https://pheasant-primary-sincerely.ngrok-free.app';
 
 function getCircularReplacer() {
@@ -23,7 +20,6 @@ function getCircularReplacer() {
 }
 
 export const getEvents = async (page = 1) => {
-    const { token } = useContext(AuthContext);
     try {
         const response = await axios.get(`${API_URL}/api/event`, { params: { page: page } });
         
@@ -36,5 +32,31 @@ export const getEvents = async (page = 1) => {
         return error.response ? error.response.data : null; 
     }
 };
+
+export const getCategorias = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/api/event-category`);
+        return response.data
+    }
+    catch (error){
+        console.error('Error en getCategorias:', error.message || error);
+        return error.response ? error.response.data : null;
+    }
+}
+
+export const getLocations = async (token) => {
+    try{       
+        const response = await axios.get(`${API_URL}/api/event-location`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    }
+    catch (error){
+        console.error('Error en getLocations:', error.message || error);
+        return error.response ? error.response.data : null;
+    }
+}
 
 

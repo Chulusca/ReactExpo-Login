@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { AuthContext } from '../context/AuthContext';
+import { getCategorias, getLocations } from '../services/Events';
 
 export default function NuevoEvento() {
+  const { token } = useContext(AuthContext);
 
   const [form, setForm] = useState({
     name: '',
@@ -16,26 +19,31 @@ export default function NuevoEvento() {
     max_assistance: ''
   });
 
-  const [categories, setCategories] = useState([
-    { id: 1, name: 'Conferencia' }, 
-    { id: 2, name: 'Taller' },
-    { id: 3, name: 'Seminario' },
-    { id: 4, name: 'Webinar' }
-  ]);
+  const [categories, setCategories] = useState([]);
 
-  const [locations, setLocations] = useState([
-    { id: 1, name: 'Auditorio Principal' },
-    { id: 2, name: 'Sala de Conferencias' },
-    { id: 3, name: 'Aula Magna' },
-    { id: 4, name: 'Sala Virtual' }
-  ]);
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await getCategorias();
+        const locationsData = await getLocations(token);
+        setCategories(categoriesData);
+        setLocations(locationsData);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        Alert.alert('Error', 'No se pudieron cargar las categorías.');
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleChange = (name, value) => {
     setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = () => {
-    // Aquí puedes manejar el envío del formulario, por ejemplo, enviarlo a una API
     Alert.alert('Formulario enviado', JSON.stringify(form));
   };
 

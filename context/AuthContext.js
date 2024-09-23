@@ -17,8 +17,10 @@ export const AuthProvider = ({ children }) => {
     const loadUser = async () => {
       try {
         const userData = await AsyncStorage.getItem('user');
+        const token = await AsyncStorage.getItem('token');
         if (userData) {
           setUser(JSON.parse(userData));
+          setToken(token);
         }
       } catch (error) {
         console.error('Error loading user data:', error);
@@ -43,6 +45,7 @@ export const AuthProvider = ({ children }) => {
 
       setToken(response.token);
       setUser(authenticatedUser);
+      await AsyncStorage.setItem('token', response.token);
       await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
     }
     else{
@@ -67,6 +70,7 @@ export const AuthProvider = ({ children }) => {
       setUser(authenticatedUser);
       setToken(response.token)
       await AsyncStorage.setItem('user', JSON.stringify(authenticatedUser));
+      await AsyncStorage.setItem('token', response.token);
       return {
         success: true
       }
@@ -80,6 +84,7 @@ export const AuthProvider = ({ children }) => {
         username: '',
         password: ''
     });
+    await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('user');
   };
 
