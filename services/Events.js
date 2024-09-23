@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useContext } from 'react'; 
 import { AuthContext } from '../context/AuthContext';
 
-const { token } = useContext(AuthContext);
+//const { token } = useContext(AuthContext);
 const API_URL = 'https://pheasant-primary-sincerely.ngrok-free.app';
 
 function getCircularReplacer() {
@@ -23,6 +23,7 @@ function getCircularReplacer() {
 }
 
 export const getEvents = async (page = 1) => {
+    const { token } = useContext(AuthContext);
     try {
         const response = await axios.get(`${API_URL}/api/event`, { params: { page: page } });
         
