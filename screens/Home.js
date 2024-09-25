@@ -33,7 +33,6 @@ export default function HomeScreen() {
         <Text style={styles.name}>{`${user.first_name} ${user.last_name}`}</Text>
         <Text style={styles.email}>{user.username}</Text>
       </View>
-      <ButtonGradient text={'Cargar Eventos'} funcion={fetchEvents} />
       <View style={styles.scrollContainer}>
         <ScrollView
           style={styles.scrollView}

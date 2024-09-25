@@ -53,10 +53,15 @@ export default function NuevoEvento() {
     
   };
 
-  const confirmEvent = async () => {
-    console.log(JSON.stringify(form));  
+  const confirmEvent = async () => { 
     const response = await createEvent(form, token);
-    Alert.alert('Evento agregado', 'El evento ha sido agregado correctamente.');
+    if(response.status == 201){
+      Alert.alert('El evento ha sido agregado correctamente.', response.message);
+    }
+    else{
+      Alert.alert('Error al crear un evento', response.message);
+    }
+    
     setModalVisible(false); 
   };
 
