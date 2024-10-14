@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView} from 'react-native';
 import ButtonGradient from "../components/ButtonGradient";  
 import { AuthContext } from '../context/AuthContext';
 import { getEvents } from '../services/Events';

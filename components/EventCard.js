@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import defaultImage from '../assets/movistarArena.jpg';
 
-export default function EventCard({ event }) {
+export default function EventCard({ event, type }) {
   return (
     <View style={styles.card}>
       <ImageBackground source={defaultImage} style={styles.image}>
@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 250,
+    height: 200,
     justifyContent: 'flex-end',
   },
   body: {
-    backgroundColor: 'rgba(100, 100, 100, 0.5)',
+    backgroundColor: 'rgba(100, 100, 100, 0.7)',
     padding: 10,
   },
   title: {

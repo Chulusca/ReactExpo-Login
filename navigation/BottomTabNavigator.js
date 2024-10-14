@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/Home';
 import NuevoEventoScreen from '../screens/NuevoEvento';
+import EditarEventoScreen from '../screens/EditarEventoScreen'
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -17,6 +18,8 @@ export default function BottomTabNavigator() {
             iconName = 'home';
           } else if (route.name === 'NuevoEvento') {
             iconName = 'add-circle';
+          } else if (route.name === 'EditarEventos') {
+            iconName = 'create-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -31,8 +34,9 @@ export default function BottomTabNavigator() {
         ]
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="NuevoEvento" component={NuevoEventoScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="EditarEventos" component={EditarEventoScreen}/>
     </Tab.Navigator>
   );
 }
