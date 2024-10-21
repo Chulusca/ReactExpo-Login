@@ -1,11 +1,19 @@
 // components/EventCard.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import defaultImage from '../assets/movistarArena.jpg';
 
 export default function EventCard({ event, type }) {
+  const id_event = event.id;
+  const navigation = useNavigation();
+
+  const handleNavigation = () => {
+    navigation.navigate('DetalleEvento', { id_event });
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={handleNavigation} style={styles.card}>
       <ImageBackground source={defaultImage} style={styles.image}>
         <View style={styles.body}>
           <Text style={styles.title}>{event.name}</Text>
@@ -13,7 +21,7 @@ export default function EventCard({ event, type }) {
           <Text style={styles.location}>{event.event_location.name}</Text>
         </View>
       </ImageBackground>
-    </View>
+    </TouchableOpacity >
   );
 }
 
