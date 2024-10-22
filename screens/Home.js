@@ -43,7 +43,7 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewContent}
         >
-          {events && events.length > 0 ? ( 
+          {Array.isArray(events) && events.length > 0 ? (  // Verificar que events sea un array
             events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))

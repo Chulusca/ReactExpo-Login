@@ -10,7 +10,12 @@ export default function EditarEvento() {
 
   return (
     <View style={styles.container}>
-      <Text style = {styles.title}>Editar Evento Screen</Text>
+      <View style={styles.card}>
+      <Text style={styles.name}>
+        Tus eventos {"\n"} 
+        {`${user.first_name} ${user.last_name}`}
+      </Text>
+      </View>
       <View style={styles.scrollContainer}>
         <ScrollView
           style={styles.scrollView}
@@ -22,10 +27,9 @@ export default function EditarEvento() {
         >
           {events && events.length > 0 ? ( 
             events.map((event) => {
-              if (!event.creator_user.username == user.username) { 
+              if (!event.creator_user.username !== user.username) { 
                 return null; 
               }
-
               return <EventCard key={event.id} event={event} />;
             })
           ) : (
@@ -44,6 +48,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f1f1f1',
+  },
+  card: {
+    width: '80%',
+    padding: 20,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   title: {
     justifyContent: 'center',
