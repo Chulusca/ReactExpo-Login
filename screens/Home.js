@@ -2,12 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView} from 'react-native';
 import ButtonGradient from "../components/ButtonGradient";  
 import { AuthContext } from '../context/AuthContext';
+import { EventsContext } from '../context/EventsContext';
 import { getEvents } from '../services/Events';
 import EventCard from '../components/EventCard';
 
 export default function HomeScreen() {
   const { user, signOut } = useContext(AuthContext);
-  const [events, setEvents] = useState([]);
+  const { events, setEvents } = useContext(EventsContext);
 
   const fetchEvents = async () => {
     const fetchedEvents = await getEvents();

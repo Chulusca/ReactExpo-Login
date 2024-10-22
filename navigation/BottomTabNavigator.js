@@ -10,22 +10,23 @@ const Tab = createBottomTabNavigator();
 export default function BottomTabNavigator() {
   return (
     <Tab.Navigator
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
           if (route.name === 'Home') {
             iconName = 'home';
-          } else if (route.name === 'NuevoEvento') {
+          } else if (route.name === 'Nuevo Evento') {
             iconName = 'add-circle';
-          } else if (route.name === 'EditarEventos') {
+          } else if (route.name === 'Tus Eventos') {
             iconName = 'create-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: 'grey',
         tabBarStyle: [
           {
             display: 'flex'
@@ -34,9 +35,9 @@ export default function BottomTabNavigator() {
         ]
       })}
     >
-      <Tab.Screen name="NuevoEvento" component={NuevoEventoScreen} />
+      <Tab.Screen name="Nuevo Evento" component={NuevoEventoScreen} />
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="EditarEventos" component={EditarEventoScreen}/>
+      <Tab.Screen name="Tus Eventos" component={EditarEventoScreen}/>
     </Tab.Navigator>
   );
 }

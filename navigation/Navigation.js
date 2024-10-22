@@ -5,6 +5,7 @@ import { AuthContext } from '../context/AuthContext';
 import BottomTabNavigator from './BottomTabNavigator';
 import LoginScreen from '../screens/Login';
 import RegisterScreen from '../screens/Register';
+import DetalleEvento from '../screens/DetalleEvento';
 
 const Stack = createStackNavigator();
 
@@ -24,7 +25,10 @@ export default function Navigation() {
         }}
       >
         {user.username ? (
-          <Stack.Screen name="HomeTabs" component={BottomTabNavigator} />
+          <>
+            <Stack.Screen name="HomeTabs" component={BottomTabNavigator} />
+            <Stack.Screen name="DetalleEvento" component={DetalleEvento} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Login" component={LoginScreen} />

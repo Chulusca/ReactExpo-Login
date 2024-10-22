@@ -1,6 +1,6 @@
 // components/EventCard.js
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import defaultImage from '../assets/movistarArena.jpg';
 
