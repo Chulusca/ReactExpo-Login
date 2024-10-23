@@ -30,7 +30,7 @@ export default function EditarEvento() {
               if (event.creator_user.username !== user.username) { 
                 return null; 
               }
-              return <EventCard key={event.id} event={event} />;
+              return <EventCard key={event.id} event={event} type={'Admin'} />;
             })
           ) : (
             <Text style={styles.text}>No hay eventos disponibles.</Text>

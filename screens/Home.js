@@ -19,7 +19,6 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchEvents();
-    console.log(upcomingEvents);
   }, []);
 
   if (user.username == '') {
@@ -48,7 +47,7 @@ export default function HomeScreen() {
         >
           {Array.isArray(upcomingEvents) && upcomingEvents.length > 0  ? (  // Verificar que events sea un array
             upcomingEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard key={event.id} event={event} type={'Home'}/>
             ))
           ) : (
             <Text style={styles.text}>No hay eventos disponibles.</Text>

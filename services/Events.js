@@ -108,3 +108,17 @@ export const getParticipants = async (id_event) => {
     }
 }
 
+export const enrollUser = async (id_event, token) => {
+    try {       
+        const response = await axios.post(`${API_URL}/api/event/enrollment/${id_event}`,{}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        console.error('Error en enrollUser:', error.message || error);
+        return error.response ? error.response.data : null;
+    }
+}
+

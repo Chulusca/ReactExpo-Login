@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Modal, TouchableOpacity, Fla } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
 import { EventsContext } from '../context/EventsContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { getParticipants } from '../services/Events';
+import { getParticipants, enrollUser } from '../services/Events';
 import ModalParticipantes from '../components/ModalParticipantes'; 
 
 export default function DetalleEvento() {
-    const { user } = useContext(AuthContext);
+    const { user, token } = useContext(AuthContext);
     const { events } = useContext(EventsContext);
     const route = useRoute();
-    const { id_event } = route.params;
+    const { id_event, fromScreen } = route.params;
 
     const [participants, setParticipants] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
@@ -23,6 +23,27 @@ export default function DetalleEvento() {
         const participantsData = await getParticipants(id_event);
         setParticipants(participantsData);
     };
+
+    const inscribirseAlEvento = async () => {
+        const response = await enrollUser(id_event, token);
+        console.log(response)
+        if(response.status == 200){
+            Alert.alert(
+              'Success',
+              `${user.username} inscripto correctamente`, 
+              [{ text: 'OK'}],
+              { cancelable: false }
+            );
+          }
+          else{
+            Alert.alert(
+              'Error',
+              `${user.username, response}`,
+              [{ text: 'OK'}],
+              { cancelable: false }
+            );
+          }
+    }
     
     useEffect(() => {
         if (modalVisible) {
@@ -52,13 +73,19 @@ export default function DetalleEvento() {
                     <Text style={styles.detail}>Máxima asistencia: {event.max_assistance}</Text>
                     <View style={styles.priceContainer}>
                         <Text style={styles.price}>Precio: ${event.price}</Text>
-                        {new Date(event.start_date) > currentDate ? (
-                            <Icon name="edit" size={24} color="#e91e63" style={styles.icon} />
-                        ) : (
-                            <TouchableOpacity onPress={() => setModalVisible(true)}>
-                                <Icon name="people" size={24} color="#3f51b5" style={styles.icon} />
-                            </TouchableOpacity> 
-                        )}
+                        {fromScreen === 'Admin' ? (
+                            new Date(event.start_date) > currentDate ? (
+                                <Icon name="edit" size={24} color="#e91e63" style={styles.icon} />
+                            ) : (
+                                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                                    <Icon name="people" size={24} color="#3f51b5" style={styles.icon} />
+                                </TouchableOpacity>
+                            )
+                        ) : fromScreen === 'Home' ? (
+                            <TouchableOpacity onPress={inscribirseAlEvento} style={styles.button}>
+                                <Text style={styles.buttonText}>Inscribirse</Text>
+                            </TouchableOpacity>
+                        ) : null}
                     </View>
                 </ScrollView>
             </View>
@@ -67,8 +94,6 @@ export default function DetalleEvento() {
                 participants={participants}
                 onClose={() => setModalVisible(false)}
             />
-            
-
         </View>
     );
 }
@@ -124,7 +149,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
     },
-
     priceContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -139,5 +163,21 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginLeft: 10,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: 20,
+    },
+    button: {
+        backgroundColor: '#3f51b5',
+        padding: 10,
+        borderRadius: 5,
+        marginHorizontal: 5,
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
 });

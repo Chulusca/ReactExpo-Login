@@ -18,6 +18,7 @@ export default function LoginScreen() {
   const handleLogin = async () => { 
     if (email && password) {
       const response = await signIn(email, password);
+      console.log(response);
       if(response.success){
         Alert.alert(
           'Success',

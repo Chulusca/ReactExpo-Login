@@ -9,7 +9,7 @@ export default function EventCard({ event, type }) {
   const navigation = useNavigation();
 
   const handleNavigation = () => {
-    navigation.navigate('DetalleEvento', { id_event });
+    navigation.navigate('DetalleEvento', { id_event, fromScreen: type });
   };
 
   return (
