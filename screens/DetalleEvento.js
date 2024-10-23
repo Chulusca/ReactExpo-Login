@@ -62,22 +62,12 @@ export default function DetalleEvento() {
                     </View>
                 </ScrollView>
             </View>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
+            <ModalParticipantes
                 visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>Cerrar</Text>
-                        </TouchableOpacity>
-                        
-                    </View>
-                </View>
-            </Modal>
+                participants={participants}
+                onClose={() => setModalVisible(false)}
+            />
+            
 
         </View>
     );
@@ -149,25 +139,5 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginLeft: 10,
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
-    },
-    modalContent: {
-        width: '80%',
-        backgroundColor: '#fff',
-        borderRadius: 10,
-        padding: 20,
-        alignItems: 'center',
-    },
-    closeButton: {
-        alignSelf: 'flex-end',
-    },
-    closeButtonText: {
-        fontSize: 16,
-        color: '#e91e63',
     },
 });

@@ -9,6 +9,8 @@ import EventCard from '../components/EventCard';
 export default function HomeScreen() {
   const { user, signOut } = useContext(AuthContext);
   const { events, setEvents } = useContext(EventsContext);
+  const currentDate = new Date();
+  const upcomingEvents = events.filter(event => new Date(event.start_date) > currentDate);
 
   const fetchEvents = async () => {
     const fetchedEvents = await getEvents();
@@ -17,6 +19,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     fetchEvents();
+    console.log(upcomingEvents);
   }, []);
 
   if (user.username == '') {
@@ -43,8 +46,8 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollViewContent}
         >
-          {Array.isArray(events) && events.length > 0 ? (  // Verificar que events sea un array
-            events.map((event) => (
+          {Array.isArray(upcomingEvents) && upcomingEvents.length > 0  ? (  // Verificar que events sea un array
+            upcomingEvents.map((event) => (
               <EventCard key={event.id} event={event} />
             ))
           ) : (
