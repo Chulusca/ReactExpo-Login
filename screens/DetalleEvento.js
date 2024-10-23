@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Modal, TouchableOpacity, Fla } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
 import { EventsContext } from '../context/EventsContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { getParticipants } from '../services/Events';
+import ModalParticipantes from '../components/ModalParticipantes'; 
 
 export default function DetalleEvento() {
     const { user } = useContext(AuthContext);
@@ -18,12 +20,15 @@ export default function DetalleEvento() {
     const currentDate = new Date();
 
     const fetchParticipants = async () => {
-        
+        const participantsData = await getParticipants(id_event);
+        setParticipants(participantsData);
     };
     
     useEffect(() => {
-        fetchParticipants();
-      }, []);
+        if (modalVisible) {
+            fetchParticipants();
+        }
+    }, [modalVisible]);
 
     if (!event) {
         return (
@@ -50,11 +55,30 @@ export default function DetalleEvento() {
                         {new Date(event.start_date) > currentDate ? (
                             <Icon name="edit" size={24} color="#e91e63" style={styles.icon} />
                         ) : (
-                            <Icon name="people" size={24} color="#3f51b5" style={styles.icon} />
+                            <TouchableOpacity onPress={() => setModalVisible(true)}>
+                                <Icon name="people" size={24} color="#3f51b5" style={styles.icon} />
+                            </TouchableOpacity> 
                         )}
                     </View>
                 </ScrollView>
             </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                            <Text style={styles.closeButtonText}>Cerrar</Text>
+                        </TouchableOpacity>
+                        
+                    </View>
+                </View>
+            </Modal>
+
         </View>
     );
 }
@@ -125,5 +149,25 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginLeft: 10,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente
+    },
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+    },
+    closeButton: {
+        alignSelf: 'flex-end',
+    },
+    closeButtonText: {
+        fontSize: 16,
+        color: '#e91e63',
     },
 });

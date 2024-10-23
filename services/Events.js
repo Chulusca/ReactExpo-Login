@@ -93,5 +93,18 @@ export const createEvent = async (eventDetails, token) => {
     }
 }
 
-
+export const getParticipants = async (id_event) => {
+    try{       
+        const response = await axios.get(`${API_URL}/api/event/enrollment/${id_event}`, {
+            headers: {
+                
+            },
+        });
+        return response.data;
+    }
+    catch (error){
+        console.error('Error en getParticipants:', error.message || error);
+        return error.response ? error.response.data : null;
+    }
+}
 

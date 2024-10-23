@@ -27,7 +27,7 @@ export default function EditarEvento() {
         >
           {events && events.length > 0 ? ( 
             events.map((event) => {
-              if (!event.creator_user.username !== user.username) { 
+              if (event.creator_user.username !== user.username) { 
                 return null; 
               }
               return <EventCard key={event.id} event={event} />;
